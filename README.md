@@ -15,7 +15,7 @@ GlobalData<br />
 Amazon Portugal<br />
 
 ## CPU (Ryzen 5 5600x, Ryzen 7 5800x):
-TopAchat<br />
+TopAchat ✔️<br />
 LDLC<br />
 Materiel.net<br />
 Amazon France<br />
