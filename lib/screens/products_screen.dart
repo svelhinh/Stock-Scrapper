@@ -1,15 +1,15 @@
 import 'dart:async';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cmoon_icons/flutter_cmoon_icons.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_scrapper/config.dart';
 import 'package:stock_scrapper/providers/dark_theme_provider.dart';
-import 'package:stock_scrapper/providers/product.dart';
 import 'package:stock_scrapper/providers/products.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:web_scraper/web_scraper.dart';
+import 'package:stock_scrapper/scrappers/topachat_scrapper.dart';
 
 class ProductsScreen extends StatefulWidget {
   @override
@@ -17,57 +17,29 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  WebScraper topachatScrapper;
   Timer timer;
 
   Products products;
   List<bool> isSelected = [false, false];
 
+  TopAchatScrapper topAchatScrapper = TopAchatScrapper();
+
+  Future<void> scrap() async {
+    products.reset();
+    topAchatScrapper.scrap(Provider.of<Products>(context, listen: false));
+  }
+
   @override
   void initState() {
     super.initState();
-    topachatScrapper = WebScraper(TOPACHAT_URL);
-    scrapTopAchatProducts();
-    timer = Timer.periodic(
-      Duration(seconds: 10),
-      (Timer t) => scrapTopAchatProducts(),
-    );
+    topAchatScrapper.scrap(Provider.of<Products>(context, listen: false));
+    timer = Timer.periodic(Duration(seconds: 10), (Timer t) => scrap());
   }
 
   @override
   void dispose() {
     timer?.cancel();
     super.dispose();
-  }
-
-  Future<void> scrapTopAchatProducts() async {
-    if (await topachatScrapper.loadWebPage(TOPACHAT_PRODUCTS_URL)) {
-      List<Map<String, dynamic>> titles = topachatScrapper.getElement(
-        'section.en-stock > div.libelle > a > h3',
-        [],
-      );
-      List<Map<String, dynamic>> prices = topachatScrapper.getElement(
-        'section.en-stock > div.price > a > div.prodF > div.prod_px_euro',
-        [],
-      );
-      List<Map<String, dynamic>> links = topachatScrapper.getElement(
-        'section.en-stock > a',
-        ['href'],
-      );
-
-      products.reset();
-
-      for (var i = 0; i < titles.length; i++) {
-        final product = Product(
-          title: titles[i]["title"],
-          price: prices[i]["title"],
-          link: "$TOPACHAT_URL${links[i]['attributes']['href']}",
-        );
-        products.addProduct(product);
-      }
-
-      //   print("REFRESHING...");
-    }
   }
 
   Future<void> _openLink(String link) async {
@@ -89,7 +61,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.refresh),
-          onPressed: scrapTopAchatProducts,
+          onPressed: () => scrap(),
         ),
         actions: [
           Padding(
@@ -118,16 +90,21 @@ class _ProductsScreenState extends State<ProductsScreen> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return products.products.isNotEmpty
-              ? Padding(
+      body: products.products.isNotEmpty
+          ? ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
                   padding:
                       const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
                   child: Container(
                     height: 100,
                     child: Card(
-                      color: Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      color: themeChange.darkTheme
+                          ? products.products[index].darkColor
+                          : products.products[index].lightColor,
                       elevation: 5,
                       child: InkWell(
                         onTap: () => _openLink(products.products[index].link),
@@ -137,7 +114,17 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(products.products[index].title),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(products.products[index].title),
+                                  Text(
+                                    EnumToString.convertToString(
+                                        products.products[index].type),
+                                  ),
+                                ],
+                              ),
                               Text(products.products[index].price),
                             ],
                           ),
@@ -145,11 +132,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       ),
                     ),
                   ),
-                )
-              : Text("");
-        },
-        itemCount: products.products.length,
-      ),
+                );
+              },
+              itemCount: products.products.length,
+            )
+          : Center(
+              child: Text(
+              "Nothing in stock",
+              style: TextStyle(fontSize: 25),
+            )),
     );
   }
 }

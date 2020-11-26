@@ -1,8 +1,14 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class Styles {
+  static const Color CPU_LIGHT_COLOR = Color(0xffececec);
+  static const Color GPU_LIGHT_COLOR = Color(0xffececec);
+  static const Color PS5_LIGHT_COLOR = Color(0xffececec);
+
+  static const Color CPU_DARK_COLOR = Color(0xff833471);
+  static const Color GPU_DARK_COLOR = Color(0xff006266);
+  static const Color PS5_DARK_COLOR = Color(0xff1289A7);
+
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
     return ThemeData(
       primarySwatch: Colors.red,
