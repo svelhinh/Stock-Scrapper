@@ -5,28 +5,28 @@ import 'package:stock_scrapper/config.dart';
 import 'package:stock_scrapper/providers/products.dart';
 import 'package:stock_scrapper/providers/product.dart';
 
-class TopAchatScrapper {
-  WebScraper topachatScrapper = WebScraper(TOPACHAT_URL);
+class TopAchatScraper {
+  WebScraper topachatScraper = WebScraper(TOPACHAT_URL);
 
   Future<bool> _loadGpu() async {
-    return topachatScrapper.loadWebPage(TOPACHAT_RTX3070_RTX3080_PRODUCTS_URL);
+    return topachatScraper.loadWebPage(TOPACHAT_RTX3070_RTX3080_URL);
   }
 
   Future<bool> _loadCpu() async {
-    return topachatScrapper.loadWebPage(TOPACHAT_RYZEN5_RYZEN7_PRODUCTS_URL);
+    return topachatScraper.loadWebPage(TOPACHAT_RYZEN5_RYZEN7_URL);
   }
 
   void addProducts(
       Products products, ProductType type, Color lightColor, Color darkColor) {
-    List<Map<String, dynamic>> titles = topachatScrapper.getElement(
+    List<Map<String, dynamic>> titles = topachatScraper.getElement(
       'section.en-stock > div.libelle > a > h3',
       [],
     );
-    List<Map<String, dynamic>> prices = topachatScrapper.getElement(
+    List<Map<String, dynamic>> prices = topachatScraper.getElement(
       'section.en-stock > div.price > a > div.prodF > div.prod_px_euro',
       [],
     );
-    List<Map<String, dynamic>> links = topachatScrapper.getElement(
+    List<Map<String, dynamic>> links = topachatScraper.getElement(
       'section.en-stock > a',
       ['href'],
     );

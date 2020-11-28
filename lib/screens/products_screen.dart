@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:stock_scrapper/config.dart';
 import 'package:stock_scrapper/providers/dark_theme_provider.dart';
 import 'package:stock_scrapper/providers/products.dart';
+import 'package:stock_scrapper/scrappers/boulanger_scraper.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:stock_scrapper/scrappers/topachat_scrapper.dart';
+import 'package:stock_scrapper/scrappers/topachat_scraper.dart';
 
 class ProductsScreen extends StatefulWidget {
   @override
@@ -22,18 +23,23 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Products products;
   List<bool> isSelected = [false, false];
 
-  TopAchatScrapper topAchatScrapper = TopAchatScrapper();
+  TopAchatScraper topAchatScraper = TopAchatScraper();
+  BoulangerScraper boulangerScraper = BoulangerScraper();
 
   Future<void> scrap() async {
     products.reset();
-    topAchatScrapper.scrap(Provider.of<Products>(context, listen: false));
+    topAchatScraper.scrap(products);
+    boulangerScraper.scrap(products);
   }
 
   @override
   void initState() {
     super.initState();
-    topAchatScrapper.scrap(Provider.of<Products>(context, listen: false));
-    timer = Timer.periodic(Duration(seconds: 10), (Timer t) => scrap());
+    products = Provider.of<Products>(context, listen: false);
+    Future(() => scrap()).then(
+      (value) =>
+          timer = Timer.periodic(Duration(seconds: 10), (Timer t) => scrap()),
+    );
   }
 
   @override
@@ -118,14 +124,23 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(products.products[index].title),
+                                  Text(
+                                    products.products[index].title,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
                                   Text(
                                     EnumToString.convertToString(
                                         products.products[index].type),
                                   ),
                                 ],
                               ),
-                              Text(products.products[index].price),
+                              Text(
+                                products.products[index].price,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              ),
                             ],
                           ),
                         ),
