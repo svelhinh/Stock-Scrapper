@@ -153,7 +153,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             )
           : Center(
               child: Text(
-              "Nothing in stock",
+              "EMPTY STOCK 😥",
               style: TextStyle(fontSize: 25),
             )),
     );
