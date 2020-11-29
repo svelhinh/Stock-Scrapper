@@ -7,11 +7,18 @@ enum ProductType {
   PS5,
 }
 
+enum ProductSite {
+  TOPACHAT,
+  BOULANGER,
+  PCCOMPONENTES,
+}
+
 class Product with ChangeNotifier {
   final String title;
   final String price;
   final String link;
   final ProductType type;
+  final ProductSite site;
   final Color lightColor;
   final Color darkColor;
 
@@ -20,6 +27,7 @@ class Product with ChangeNotifier {
     @required this.price,
     @required this.link,
     @required this.type,
+    @required this.site,
     @required this.lightColor,
     @required this.darkColor,
   });

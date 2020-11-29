@@ -11,3 +11,9 @@ const TOPACHAT_RYZEN5_RYZEN7_URL =
 const BOULANGER_URL = 'https://www.boulanger.com';
 const BOULANGER_PS5_URL = "/ref/1147567";
 // const BOULANGER_PS5_URL = "/ref/1151633";
+
+const PCCOMPONENTES_URL = 'https://www.pccomponentes.pt';
+const PCCOMPONENTES_RTX3070_URL = "/placas-graficas/geforce-rtx-3070-series";
+const PCCOMPONENTES_RTX3080_URL = "/placas-graficas/geforce-rtx-3080-series";
+// const PCCOMPONENTES_RTX3070_URL = "/placas-graficas";
+// const PCCOMPONENTES_RTX3080_URL = "/placas-graficas";

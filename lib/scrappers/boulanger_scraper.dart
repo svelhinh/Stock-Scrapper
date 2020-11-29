@@ -34,6 +34,7 @@ class BoulangerScraper {
         price: prices[0]["title"].trim(),
         link: "$BOULANGER_URL$BOULANGER_PS5_URL",
         type: ProductType.PS5,
+        site: ProductSite.BOULANGER,
         lightColor: Styles.PS5_LIGHT_COLOR,
         darkColor: Styles.PS5_DARK_COLOR,
       );

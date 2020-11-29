@@ -16,7 +16,6 @@ TopAchat ✔️<br />
 LDLC<br />
 Materiel.net<br />
 RueDuCommerce<br />
-PCComponentes<br />
 Chiptec<br />
 GlobalData<br />
 

@@ -7,8 +7,11 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_scrapper/config.dart';
 import 'package:stock_scrapper/providers/dark_theme_provider.dart';
+import 'package:stock_scrapper/providers/product.dart';
 import 'package:stock_scrapper/providers/products.dart';
 import 'package:stock_scrapper/scrappers/boulanger_scraper.dart';
+import 'package:stock_scrapper/scrappers/pccomponentes_scraper.dart';
+import 'package:stock_scrapper/widgets/filter_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:stock_scrapper/scrappers/topachat_scraper.dart';
 
@@ -25,11 +28,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   TopAchatScraper topAchatScraper = TopAchatScraper();
   BoulangerScraper boulangerScraper = BoulangerScraper();
+  PcComponentesScraper pcComponentesScraper = PcComponentesScraper();
+
+  List<String> sitesFiltersList = [];
+  List<String> productsFiltersList = [];
 
   Future<void> scrap() async {
     products.reset();
     topAchatScraper.scrap(products);
     boulangerScraper.scrap(products);
+    pcComponentesScraper.scrap(products);
   }
 
   @override
@@ -54,6 +62,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
     } else {
       throw 'Could not launch $link';
     }
+  }
+
+  void _onApplySitesFilter(List<String> list) {
+    setState(() {
+      sitesFiltersList = List.from(list);
+    });
+  }
+
+  void _onApplyProductsFilter(List<String> list) {
+    setState(() {
+      productsFiltersList = List.from(list);
+    });
   }
 
   @override
@@ -96,66 +116,115 @@ class _ProductsScreenState extends State<ProductsScreen> {
           ),
         ],
       ),
-      body: products.products.isNotEmpty
-          ? ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
-                  child: Container(
-                    height: 100,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      color: themeChange.darkTheme
-                          ? products.products[index].darkColor
-                          : products.products[index].lightColor,
-                      elevation: 5,
-                      child: InkWell(
-                        onTap: () => _openLink(products.products[index].link),
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(right: 30.0, left: 30.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    products.products[index].title,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
-                                  ),
-                                  Text(
-                                    EnumToString.convertToString(
-                                        products.products[index].type),
-                                  ),
-                                ],
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 20.0, right: 20.0, top: 10.0, bottom: 10.0),
+            child: Row(
+              children: [
+                FilterButton(
+                  onApply: _onApplySitesFilter,
+                  selectedCountList: sitesFiltersList,
+                  enumValues: EnumToString.toList(ProductSite.values),
+                  title: "Filter Sites",
+                  headlineText: "Select Sites",
+                ),
+                FilterButton(
+                  onApply: _onApplyProductsFilter,
+                  selectedCountList: productsFiltersList,
+                  enumValues: EnumToString.toList(ProductType.values),
+                  title: "Filter Products",
+                  headlineText: "Select Products",
+                ),
+              ],
+            ),
+          ),
+          products.products.isNotEmpty
+              ? Expanded(
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext context, int index) {
+                      if (sitesFiltersList.isNotEmpty &&
+                              !sitesFiltersList.contains(
+                                  EnumToString.convertToString(
+                                      products.products[index].site)) ||
+                          productsFiltersList.isNotEmpty &&
+                              !productsFiltersList.contains(
+                                  EnumToString.convertToString(
+                                      products.products[index].type)))
+                        return Container();
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20.0, right: 20.0, top: 5.0),
+                        child: Container(
+                          height: 100,
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            color: themeChange.darkTheme
+                                ? products.products[index].darkColor
+                                : products.products[index].lightColor,
+                            elevation: 5,
+                            child: InkWell(
+                              onTap: () =>
+                                  _openLink(products.products[index].link),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 30.0, left: 30.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          products.products[index].title,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15),
+                                        ),
+                                        Text(
+                                          EnumToString.convertToString(
+                                              products.products[index].type),
+                                        ),
+                                        Text(
+                                          EnumToString.convertToString(
+                                              products.products[index].site),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      products.products[index].price,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Text(
-                                products.products[index].price,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                      );
+                    },
+                    itemCount: products.products.length,
+                  ),
+                )
+              : Expanded(
+                  child: Center(
+                    child: Text(
+                      "EMPTY STOCK 😥",
+                      style: TextStyle(fontSize: 25),
                     ),
                   ),
-                );
-              },
-              itemCount: products.products.length,
-            )
-          : Center(
-              child: Text(
-              "EMPTY STOCK 😥",
-              style: TextStyle(fontSize: 25),
-            )),
+                ),
+        ],
+      ),
     );
   }
 }

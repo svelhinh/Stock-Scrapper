@@ -37,6 +37,7 @@ class TopAchatScraper {
         price: prices[i]["title"],
         link: "$TOPACHAT_URL${links[i]['attributes']['href']}",
         type: type,
+        site: ProductSite.TOPACHAT,
         lightColor: lightColor,
         darkColor: darkColor,
       );
