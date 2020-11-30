@@ -22,5 +22,5 @@ GlobalData<br />
 ## PS5:
 
 Boulanger ✔️<br />
-Leclerc<br />
+Leclerc ✔️<br />
 Micromania<br />

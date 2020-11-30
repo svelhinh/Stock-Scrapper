@@ -11,6 +11,7 @@ enum ProductSite {
   TOPACHAT,
   BOULANGER,
   PCCOMPONENTES,
+  LECLERC,
 }
 
 class Product with ChangeNotifier {
