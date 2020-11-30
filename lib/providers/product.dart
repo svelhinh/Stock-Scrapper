@@ -12,6 +12,7 @@ enum ProductSite {
   BOULANGER,
   PCCOMPONENTES,
   LECLERC,
+  LDLC,
 }
 
 class Product with ChangeNotifier {

@@ -3,7 +3,7 @@
 ## GPU (RTX 3070, RTX 3080):
 
 TopAchat ✔️<br />
-LDLC<br />
+LDLC ✔️<br />
 Materiel.net<br />
 RueDuCommerce<br />
 PCComponentes ✔️<br />
@@ -24,3 +24,4 @@ GlobalData<br />
 Boulanger ✔️<br />
 Leclerc ✔️<br />
 Micromania<br />
+LDLC<br />
