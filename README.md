@@ -23,5 +23,4 @@ GlobalData<br />
 
 Boulanger ✔️<br />
 Leclerc ✔️<br />
-Micromania<br />
-LDLC<br />
+LDLC ✔️<br />

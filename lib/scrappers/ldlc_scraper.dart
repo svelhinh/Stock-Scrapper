@@ -16,6 +16,10 @@ class LdlcScraper {
     return ldlcScraper.loadWebPage(LDLC_RYZEN5_RYZEN7_URL);
   }
 
+  Future<bool> _loadPs5() async {
+    return ldlcScraper.loadWebPage(LDLC_PS5_URL);
+  }
+
   void addProducts(
       Products products, ProductType type, Color lightColor, Color darkColor) {
     List<Map<String, dynamic>> articles = ldlcScraper.getElement(
@@ -69,6 +73,13 @@ class LdlcScraper {
         ProductType.CPU,
         Styles.CPU_LIGHT_COLOR,
         Styles.CPU_DARK_COLOR,
+      );
+    if (await _loadPs5())
+      addProducts(
+        products,
+        ProductType.PS5,
+        Styles.PS5_LIGHT_COLOR,
+        Styles.PS5_DARK_COLOR,
       );
   }
 }

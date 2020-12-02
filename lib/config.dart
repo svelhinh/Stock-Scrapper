@@ -13,6 +13,7 @@ const LDLC_RTX3070_RTX3080_URL =
     "/informatique/pieces-informatique/carte-graphique-interne/c4684/+fdi-1+fv121-19183,19184.html?sort=1";
 const LDLC_RYZEN5_RYZEN7_URL =
     "/informatique/pieces-informatique/processeur/c4300/+fdi-1+fv1448-19308+fv579-15490,15637.html?sort=1";
+const LDLC_PS5_URL = "/jeux-loisirs/console/console-ps5/c7865/+fdi-1.html";
 // const LDLC_RTX3070_RTX3080_URL =
 //     "/informatique/pieces-informatique/carte-graphique-interne/c4684/+fdi-1.html?sort=1";
 // const LDLC_RYZEN5_RYZEN7_URL =
