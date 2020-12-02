@@ -12,9 +12,9 @@ class LdlcScraper {
     return ldlcScraper.loadWebPage(LDLC_RTX3070_RTX3080_URL);
   }
 
-//   Future<bool> _loadCpu() async {
-//     return ldlcScraper.loadWebPage(LDLC_RYZEN5_RYZEN7_URL);
-//   }
+  Future<bool> _loadCpu() async {
+    return ldlcScraper.loadWebPage(LDLC_RYZEN5_RYZEN7_URL);
+  }
 
   void addProducts(
       Products products, ProductType type, Color lightColor, Color darkColor) {
@@ -63,12 +63,12 @@ class LdlcScraper {
         Styles.GPU_LIGHT_COLOR,
         Styles.GPU_DARK_COLOR,
       );
-    // if (await _loadCpu())
-    //   addProducts(
-    //     products,
-    //     ProductType.CPU,
-    //     Styles.CPU_LIGHT_COLOR,
-    //     Styles.CPU_DARK_COLOR,
-    //   );
+    if (await _loadCpu())
+      addProducts(
+        products,
+        ProductType.CPU,
+        Styles.CPU_LIGHT_COLOR,
+        Styles.CPU_DARK_COLOR,
+      );
   }
 }
