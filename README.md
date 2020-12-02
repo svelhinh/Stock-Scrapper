@@ -13,7 +13,7 @@ GlobalData<br />
 ## CPU (Ryzen 5 5600x, Ryzen 7 5800x):
 
 TopAchat ✔️<br />
-LDLC<br />
+LDLC ✔️<br />
 Materiel.net<br />
 RueDuCommerce<br />
 Chiptec<br />
