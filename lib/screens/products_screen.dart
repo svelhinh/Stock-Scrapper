@@ -12,6 +12,7 @@ import 'package:stock_scrapper/providers/products.dart';
 import 'package:stock_scrapper/scrappers/boulanger_scraper.dart';
 import 'package:stock_scrapper/scrappers/ldlc_scraper.dart';
 import 'package:stock_scrapper/scrappers/leclerc_scraper.dart';
+import 'package:stock_scrapper/scrappers/materiel_net_scraper.dart';
 import 'package:stock_scrapper/scrappers/pccomponentes_scraper.dart';
 import 'package:stock_scrapper/widgets/filter_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,6 +34,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   LeclercScraper leclercScraper = LeclercScraper();
   PcComponentesScraper pcComponentesScraper = PcComponentesScraper();
   LdlcScraper ldlcScraper = LdlcScraper();
+  MaterielNetScraper materielNetScraper = MaterielNetScraper();
 
   List<String> sitesFiltersList = [];
   List<String> productsFiltersList = [];
@@ -44,6 +46,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
     leclercScraper.scrap(products);
     pcComponentesScraper.scrap(products);
     ldlcScraper.scrap(products);
+    materielNetScraper.scrap(products);
   }
 
   @override
